@@ -2,8 +2,8 @@ import mongoose from "mongoose";
 
 const ChatroomSchema = new mongoose.Schema({
   type: { type: String, enum: ["private", "group", "global"], required: true },
-  avatar: { type: String },
-  name: { type: String },
+  avatar: { type: String, default: "" },
+  name: { type: String, default: "" },
   members: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   createdAt: { type: Date, default: Date.now },
 });

@@ -1,15 +1,10 @@
-import { connectToDB } from "./mongoDB.js";
-import mongoose from "mongoose";
+import Chatroom from "./models/chatroom-schema.js";
 import path from "path";
-import { PortfolioFrontImage } from "./models/PortfolioFrontImageSchema.js";
-import { GalleryImage } from "./models/GalleryImageSchema.js";
-import { AlbumImage } from "./models/AlbumImageSchema.js";
-import { DisplayImage } from "./models/DisplayImageSchema.js";
-import { AboutMe } from "./models/AboutMeSchema.js";
-import { SectionImage } from "./models/SectionImageSchema.js";
+import { connectToDB } from "./utils/mongoDB.js";
 import { fileURLToPath } from "url";
 import fs from "fs";
 import dotenv from "dotenv";
+import mongoose from "mongoose";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -32,55 +27,34 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 const store = await connectToDB();
-
-const newImages = [
+const seedChatrooms = [
   {
-    category: "All",
-    imageURL:
-      "https://res.cloudinary.com/dk1yh5mdu/image/upload/f_auto,q_auto,w_1440/v1745321482/Pai/views/portfolio/Architecture/spopig4s6izleqdfahck.jpg",
+    type: "private",
+    name: "",
+    members: [
+      new mongoose.Types.ObjectId("6842526c666b6a408c6483ef"),
+      new mongoose.Types.ObjectId("6842529e666b6a408c6483f9"),
+    ],
+    avatar: "",
   },
   {
-    category: "Architecture",
-    imageURL:
-      "https://res.cloudinary.com/dk1yh5mdu/image/upload/f_auto,q_auto,w_1440/v1745757660/Pai/views/portfolio/Architecture/rp4ahp00e7z7jz7pfd6q.jpg",
-  },
-  {
-    category: "Landscape",
-    imageURL:
-      "https://res.cloudinary.com/dk1yh5mdu/image/upload/f_auto,q_auto,w_1440/v1745406064/Pai/views/portfolio/Landscape/sag3srh2ongcvrqoicyg.jpg",
-  },
-  {
-    category: "Motorcycle",
-    imageURL:
-      "https://res.cloudinary.com/dk1yh5mdu/image/upload/f_auto,q_auto,w_1440/v1745758165/Pai/views/portfolio/Motorcycle/megeehvrzrayz5pcq3hh.jpg",
-  },
-  {
-    category: "Others",
-    imageURL:
-      "https://res.cloudinary.com/dk1yh5mdu/image/upload/f_auto,q_auto,w_1440/v1745757790/Pai/views/portfolio/Others/bprffwjupqyrkyoanwsr.jpg",
-  },
-  {
-    category: "Portrait",
-    imageURL:
-      "https://res.cloudinary.com/dk1yh5mdu/image/upload/f_auto,q_auto,w_1440/v1745758012/Pai/views/portfolio/Portrait/fptmn4gok0bq7tqztvx1.jpg",
-  },
-  {
-    category: "Street",
-    imageURL:
-      "https://res.cloudinary.com/dk1yh5mdu/image/upload/f_auto,q_auto,w_1440/v1745751330/Pai/views/portfolio/Street/vkf1e9qrtytie2rf5ec4.jpg",
+    type: "private",
+    name: "",
+    members: [
+      new mongoose.Types.ObjectId("6842526c666b6a408c6483ef"),
+      new mongoose.Types.ObjectId("684252df666b6a408c648403"),
+    ],
+    avatar: "",
   },
 ];
 
-async function seedImages() {
+async function seedChatroom() {
   try {
-    await SectionImage.updateMany(
-      {},
-      { offsetY: { mobile: 0, tablet: 0, desktop: 0 } }
-    );
-    console.log("SectionImage seeded successfully!");
+    await Chatroom.insertMany(seedChatrooms);
+    console.log("Chatroom seeded successfully!");
   } catch (error) {
-    console.error("Error seeding SectionImage:", error);
+    console.error("Error seeding Chatroom:", error);
   }
 }
 
-await seedImages();
+await seedChatroom();

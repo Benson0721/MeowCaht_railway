@@ -1,11 +1,11 @@
 import express from "express";
 import {
   logout,
-  register,
+  signup,
   editUser,
-  login,
   getOtherUsers,
   changeStatus,
+  login,
 } from "../controllers/user-controller.js";
 import { checkAuth } from "../utils/checkAuth.js";
 
@@ -24,8 +24,9 @@ router
   .put("/", checkAuth, editUser)
   .patch("/", checkAuth, changeStatus);
 
-router.post("/signup", register);
+router.post("/signup", signup);
 router.post("/login", login);
+
 router.get("/logout", logout);
 
 export { router };

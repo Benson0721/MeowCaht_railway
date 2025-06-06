@@ -3,7 +3,7 @@ import Chatroom from "../models/chatroom-schema.js";
 import ChatroomMember from "../models/chatroom_member-schema.js";
 import passport from "passport";
 
-export const register = async (req, res) => {
+export const signup = async (req, res) => {
   try {
     const { email, username, password } = req.body;
     const existingUser = await User.findOne({ email });
@@ -14,14 +14,26 @@ export const register = async (req, res) => {
     const registeredUser = await User.register(newuser, password);
     req.login(registeredUser, (err) => {
       if (err) return next(err);
-      res.json(req.user);
+      const user = {
+        _id: registeredUser._id,
+        username: registeredUser.username,
+        avatar: registeredUser.avatar,
+        status: registeredUser.status,
+      };
+      res.json(user);
     });
     const globalChatroom = await Chatroom.findOne({ type: "global" });
     if (!globalChatroom) {
       throw new Error("Global chatroom not found");
     }
+    const user = await User.findOne({ email: registeredUser.email });
+    if (!user) {
+      throw new Error("User not found");
+    }
+    globalChatroom.members.push(user._id);
+    await globalChatroom.save();
     const chatroomMember = new ChatroomMember({
-      user_id: registeredUser._id,
+      user_id: user._id,
       chatroom_id: globalChatroom._id,
     });
     await chatroomMember.save();
@@ -31,21 +43,27 @@ export const register = async (req, res) => {
   }
 };
 
-export const login = (req, res) => {
-  passport.authenticate("local", (err, user) => {
+export const login = (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
     if (err) return res.status(500).json({ error: "Login failed" });
 
     if (!user) {
-      return res.status(401).json({ error: "Invalid credentails" });
+      return res.status(401).json({ error: info.message });
     }
 
     req.login(user, (err) => {
       if (err) {
         return res.status(500).json({ error: "Login failed" });
       }
-      return res.json(user);
+      const loginuser = {
+        _id: user._id,
+        username: user.username,
+        avatar: user.avatar,
+        status: user.status,
+      };
+      return res.json(loginuser);
     });
-  })(req, res);
+  })(req, res, next);
 };
 
 export const logout = (req, res) => {
