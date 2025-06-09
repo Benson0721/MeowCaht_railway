@@ -5,9 +5,7 @@ import Message from "../models/message-schema.js";
 export const getChatrooms = async (req, res) => {
   try {
     const { user_id } = req.query;
-    console.log(user_id);
     const chatrooms = await Chatroom.find({ members: { $in: user_id } });
-    console.log(chatrooms);
     res.json(chatrooms);
   } catch (error) {
     console.error("伺服器錯誤:", error.message);

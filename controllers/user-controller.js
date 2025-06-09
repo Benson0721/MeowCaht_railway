@@ -51,10 +51,12 @@ export const login = (req, res, next) => {
       return res.status(401).json({ error: info.message });
     }
 
-    req.login(user, (err) => {
+    req.login(user, async (err) => {
       if (err) {
         return res.status(500).json({ error: "Login failed" });
       }
+      user.status = "online";
+      await user.save();
       const loginuser = {
         _id: user._id,
         username: user.username,
@@ -66,15 +68,22 @@ export const login = (req, res, next) => {
   })(req, res, next);
 };
 
-export const logout = (req, res) => {
+export const logout = async (req, res, next) => {
   req.logout(function (err) {
     if (err) {
       return next(err);
     }
-    req.session.destroy((err) => {
+    req.session.destroy(async (err) => {
       if (err) {
         return next(err);
       }
+      const { user_id } = req.query;
+      const user = await User.findById(user_id);
+      if (!user) {
+        throw new Error("User not found");
+      }
+      user.status = "offline";
+      await user.save();
       res.clearCookie("connect.sid");
       res.json({ message: "Logged out" });
     });
