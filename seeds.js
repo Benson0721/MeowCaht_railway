@@ -5,6 +5,7 @@ import { fileURLToPath } from "url";
 import fs from "fs";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
+import Message from "./models/message-schema.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -50,7 +51,7 @@ const seedChatrooms = [
 
 async function seedChatroom() {
   try {
-    await Chatroom.insertMany(seedChatrooms);
+    await Message.deleteMany({});
     console.log("Chatroom seeded successfully!");
   } catch (error) {
     console.error("Error seeding Chatroom:", error);

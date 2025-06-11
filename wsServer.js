@@ -4,6 +4,7 @@ import { createServer } from "node:http";
 import { fileURLToPath } from "url";
 import path from "path";
 import cors from "cors";
+import axios from "axios";
 const app = express();
 const server = createServer(app);
 const __filename = fileURLToPath(import.meta.url);
@@ -20,15 +21,28 @@ const io = new Server(server, {
 app.use(cors());
 
 io.on("connection", (socket) => {
-  console.log("a user connected");
+  const userId = socket.handshake.query.userId;
+  console.log("a user connected:", userId);
+  io.emit("user-status-online", userId);
 
-  socket.on("chat message", (msg) => {
+  socket.on("join room", (room_id) => {
+    console.log("join room: " + room_id);
+    socket.join(room_id);
+  });
+
+  socket.on("leave room", (room_id) => {
+    console.log("leave room: " + room_id);
+    socket.leave(room_id);
+  });
+
+  socket.on("chat message", (msg, room_id) => {
     console.log("message: " + msg);
-    io.emit("chat message", msg);
+    io.to(room_id).emit("chat message", msg);
   });
 
   socket.on("disconnect", () => {
-    console.log("user disconnected", socket.id);
+    io.emit("user-status-offline", userId);
+    console.log("user disconnected", userId);
   });
 });
 

@@ -3,8 +3,8 @@ import ChatroomMember from "../models/chatroom_member-schema.js";
 
 export const getHistoryMessage = async (req, res) => {
   try {
-    const { chatroom_id } = req.body;
-    const messages = await Message.find({ chatroom_id });
+    const { chatroom_id } = req.query;
+    const messages = await Message.find({ chatroom_id }).populate("user");
     res.json(messages);
   } catch (error) {
     console.error("伺服器錯誤:", error.message);
@@ -15,9 +15,10 @@ export const getHistoryMessage = async (req, res) => {
 export const sendMessage = async (req, res) => {
   try {
     const { chatroom_id, user_id, content, type, reply_to } = req.body;
+    console.log(chatroom_id, user_id, content, type, reply_to);
     const message = new Message({
       chatroom_id,
-      user_id,
+      user: user_id,
       content,
       type,
     });
@@ -25,7 +26,10 @@ export const sendMessage = async (req, res) => {
       message.reply_to = reply_to;
     }
     const savedMessage = await message.save();
-    res.json(savedMessage);
+    const foundNewMessage = await Message.findById(savedMessage._id).populate(
+      "user"
+    );
+    res.json(foundNewMessage);
   } catch (error) {
     console.error("伺服器錯誤:", error.message);
     res.status(400).json({ error: error.message });

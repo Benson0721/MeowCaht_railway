@@ -5,7 +5,7 @@ const UserSchema = new mongoose.Schema(
   {
     email: { type: String, required: true, unique: true },
     username: { type: String, required: true, unique: true },
-    avatar: { type: String },
+    avatar: { type: String, default: "" },
     status: { type: String, enum: ["online", "offline"], default: "offline" },
   },
   { timestamps: true }

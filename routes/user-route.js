@@ -22,7 +22,7 @@ router.get("/checkAuth", (req, res) => {
 router
   .get("/", checkAuth, getOtherUsers)
   .put("/", checkAuth, editUser)
-  .patch("/", checkAuth, changeStatus);
+  .patch("/", changeStatus);
 
 router.post("/signup", signup);
 router.post("/login", login);
