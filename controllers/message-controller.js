@@ -4,7 +4,9 @@ import ChatroomMember from "../models/chatroom_member-schema.js";
 export const getHistoryMessage = async (req, res) => {
   try {
     const { chatroom_id } = req.query;
-    const messages = await Message.find({ chatroom_id }).populate("user");
+    const messages = await Message.find({ chatroom_id })
+      .populate("user")
+      .populate({ path: "reply_to", populate: "user" });
     res.json(messages);
   } catch (error) {
     console.error("伺服器錯誤:", error.message);
@@ -26,9 +28,9 @@ export const sendMessage = async (req, res) => {
       message.reply_to = reply_to;
     }
     const savedMessage = await message.save();
-    const foundNewMessage = await Message.findById(savedMessage._id).populate(
-      "user"
-    );
+    const foundNewMessage = await Message.findById(savedMessage._id)
+      .populate("user")
+      .populate({ path: "reply_to", populate: "user" });
     res.json(foundNewMessage);
   } catch (error) {
     console.error("伺服器錯誤:", error.message);
@@ -39,12 +41,14 @@ export const sendMessage = async (req, res) => {
 export const recallMessage = async (req, res) => {
   try {
     const { message_id } = req.body;
+    console.log("撤回訊息", message_id);
     const message = await Message.findByIdAndUpdate(
       message_id,
       { $set: { isRecalled: true } },
       { new: true }
-    );
-    res.json(message.isRecalled);
+    ).populate("user");
+
+    res.json(message);
   } catch (error) {
     console.error("伺服器錯誤:", error.message);
     res.status(400).json({ error: error.message });

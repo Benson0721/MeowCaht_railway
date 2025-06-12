@@ -36,8 +36,12 @@ io.on("connection", (socket) => {
   });
 
   socket.on("chat message", (msg, room_id) => {
-    console.log("message: " + msg);
     io.to(room_id).emit("chat message", msg);
+  });
+
+  socket.on("update message", (message_id, user_id) => {
+    console.log("update message: " + message_id);
+    io.emit("update message", message_id, user_id);
   });
 
   socket.on("disconnect", () => {
