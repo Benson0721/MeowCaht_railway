@@ -3,11 +3,17 @@ import { checkAuth } from "../utils/checkAuth.js";
 import {
   getChatrooms,
   newChatroom,
-  countUnreadMessage,
+  getChatroomMember,
+  updateLastReadAt,
+  updateUnreadCount,
 } from "../controllers/chatroom-controller.js";
 const router = express.Router();
 
 router.route("/").get(checkAuth, getChatrooms).post(checkAuth, newChatroom);
-router.route("/unread").get(checkAuth, countUnreadMessage);
+router
+  .route("/member")
+  .get(checkAuth, getChatroomMember)
+  .patch(checkAuth, updateLastReadAt)
+  .put(checkAuth, updateUnreadCount);
 
 export { router };

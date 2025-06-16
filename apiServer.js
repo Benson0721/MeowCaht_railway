@@ -12,6 +12,7 @@ import cors from "cors";
 import { router as userRouter } from "./routes/user-route.js";
 import { router as chatroomRouter } from "./routes/chatroom-route.js";
 import { router as messageRouter } from "./routes/message-route.js";
+import { router as stickerRouter } from "./routes/sticker-routes.js";
 // 獲取當前檔案的路徑
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -98,6 +99,7 @@ const prefix = process.env.NODE_ENV !== "production" ? "" : "/api";
 app.use(prefix + "/user", userRouter);
 app.use(prefix + "/chatroom", chatroomRouter);
 app.use(prefix + "/message", messageRouter);
+app.use(prefix + "/sticker", stickerRouter);
 
 app.get("/wakeup", (req, res) => {
   console.log("Allright...I have wake up...");

@@ -12,7 +12,11 @@ const MessageSchema = new mongoose.Schema({
     required: true,
   },
   content: { type: String },
-  type: { type: String, enum: ["text", "image", "system"], default: "text" },
+  type: {
+    type: String,
+    enum: ["text", "image", "system", "sticker"],
+    default: "text",
+  },
   reply_to: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Message",

@@ -1,4 +1,7 @@
 import Chatroom from "./models/chatroom-schema.js";
+import ChatroomMember from "./models/chatroom_member-schema.js";
+import Sticker from "./models/sticker-schema.js";
+import User from "./models/user-schema.js";
 import path from "path";
 import { connectToDB } from "./utils/mongoDB.js";
 import { fileURLToPath } from "url";
@@ -28,34 +31,14 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 const store = await connectToDB();
-const seedChatrooms = [
-  {
-    type: "private",
-    name: "",
-    members: [
-      new mongoose.Types.ObjectId("6842526c666b6a408c6483ef"),
-      new mongoose.Types.ObjectId("6842529e666b6a408c6483f9"),
-    ],
-    avatar: "",
-  },
-  {
-    type: "private",
-    name: "",
-    members: [
-      new mongoose.Types.ObjectId("6842526c666b6a408c6483ef"),
-      new mongoose.Types.ObjectId("684252df666b6a408c648403"),
-    ],
-    avatar: "",
-  },
-];
 
-async function seedChatroom() {
+async function seedChatroomMember() {
   try {
     await Message.deleteMany({});
-    console.log("Chatroom seeded successfully!");
+    console.log("ChatroomMember seeded successfully!");
   } catch (error) {
-    console.error("Error seeding Chatroom:", error);
+    console.error("Error seeding ChatroomMember:", error);
   }
 }
 
-await seedChatroom();
+await seedChatroomMember();

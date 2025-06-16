@@ -44,6 +44,27 @@ io.on("connection", (socket) => {
     io.emit("update message", message_id, user_id);
   });
 
+  socket.on("update unread", (chatroom_id) => {
+    console.log("update unread: " + chatroom_id);
+    io.emit("update unread", chatroom_id);
+  });
+
+  /*socket.on("update own unread", (chatroom_id, user_id) => {
+    console.log("update own unread: " + chatroom_id);
+    console.log("user_id: " + user_id);
+    io.emit("update own unread", chatroom_id, user_id);
+  });*/
+
+  /*socket.on("update other unread", (chatroom_id, user_id) => {
+    console.log("update other unread: " + chatroom_id);
+    console.log("user_id: " + user_id);
+    io.emit("update other unread", chatroom_id, user_id);
+  });*/
+  socket.on("update last_read_time", (chatroom_id, user_id) => {
+    console.log("update last_read_time: " + chatroom_id);
+    console.log("user_id: " + user_id);
+    io.emit("update last_read_time", chatroom_id, user_id);
+  });
   socket.on("disconnect", () => {
     io.emit("user-status-offline", userId);
     console.log("user disconnected", userId);
