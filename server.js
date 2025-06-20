@@ -9,6 +9,7 @@ import session from "express-session";
 import { connectToDB } from "./utils/mongoDB.js";
 import User from "./models/user-schema.js";
 import cors from "cors";
+import wsServer from "./wsServer.js";
 import {
   UserRoutes,
   ChatroomRoutes,
@@ -40,6 +41,7 @@ if (process.env.NODE_ENV !== "production") {
 const store = await connectToDB();
 
 const app = express();
+
 const port = process.env.PORT || 5000;
 app.set("trust proxy", 1);
 
@@ -113,6 +115,8 @@ app.get("/wakeup", (req, res) => {
 app.listen(port, () => {
   console.log(`Serving on port ${port}`);
 });
+
+wsServer(app);
 
 app.on("error", (err) => {
   console.error("Server error:", err);

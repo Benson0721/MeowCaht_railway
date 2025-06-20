@@ -7,7 +7,7 @@
     "dev:api": "nodemon apiServer.js",
     "dev:ws": "nodemon wsServer.js",
     "dev": "concurrently \"npm run dev:api\" \"npm run dev:ws\"",
-    "start": "concurrently \"node apiServer.js\" \"node wsServer.js\""
+    "start": "node server.js"
   },
   "dependencies": {
     "axios": "^1.9.0",
