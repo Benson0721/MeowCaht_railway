@@ -111,12 +111,12 @@ app.get("/wakeup", (req, res) => {
   res.send("Allright...I have wake up...");
 });
 
-app.listen(port, () => {
+const server = wsServer(app);
+
+server.listen(port, () => {
   console.log(`Serving on port ${port}`);
 });
 
-wsServer(app);
-
-app.on("error", (err) => {
+server.on("error", (err) => {
   console.error("Server error:", err);
 });
