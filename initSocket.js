@@ -2,6 +2,12 @@ import { Server } from "socket.io";
 
 export default function initSocket(server) {
   const io = new Server(server, {
+    pingInterval: 5000,
+    pingTimeout: 60000,
+    transports: ["websocket"],
+    reconnection: true,
+    reconnectionAttempts: 5,
+    reconnectionDelay: 1000,
     cors: {
       origin: ["https://meow-chat-vercel.vercel.app", "http://localhost:5173"],
       credentials: true,
