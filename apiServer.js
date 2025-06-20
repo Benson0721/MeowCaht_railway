@@ -9,10 +9,13 @@ import session from "express-session";
 import { connectToDB } from "./utils/mongoDB.js";
 import User from "./models/user-schema.js";
 import cors from "cors";
-import { router as userRouter } from "./routes/user-route.js";
-import { router as chatroomRouter } from "./routes/chatroom-route.js";
-import { router as messageRouter } from "./routes/message-route.js";
-import { router as stickerRouter } from "./routes/sticker-routes.js";
+import {
+  UserRoutes,
+  ChatroomRoutes,
+  MessageRoutes,
+  StickerRoutes,
+  ChatroomMemberRoutes,
+} from "./routes/routes.js";
 // 獲取當前檔案的路徑
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -96,10 +99,11 @@ passport.deserializeUser(User.deserializeUser());
 
 const prefix = process.env.NODE_ENV !== "production" ? "" : "/api";
 
-app.use(prefix + "/user", userRouter);
-app.use(prefix + "/chatroom", chatroomRouter);
-app.use(prefix + "/message", messageRouter);
-app.use(prefix + "/sticker", stickerRouter);
+app.use(prefix + "/user", UserRoutes);
+app.use(prefix + "/chatroom", ChatroomRoutes);
+app.use(prefix + "/message", MessageRoutes);
+app.use(prefix + "/sticker", StickerRoutes);
+app.use(prefix + "/member", ChatroomMemberRoutes);
 
 app.get("/wakeup", (req, res) => {
   console.log("Allright...I have wake up...");

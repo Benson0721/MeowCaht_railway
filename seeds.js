@@ -32,13 +32,18 @@ if (process.env.NODE_ENV !== "production") {
 
 const store = await connectToDB();
 
-async function seedChatroomMember() {
+async function seedUser() {
   try {
-    await Message.deleteMany({});
-    console.log("ChatroomMember seeded successfully!");
+    await User.find().updateMany({
+      $set: {
+        avatar:
+          "https://images.unsplash.com/photo-1535268647677-300dbf3d78d1?w=100&h=100&fit=crop&crop=faces",
+      },
+    });
+    console.log("User seeded successfully!");
   } catch (error) {
-    console.error("Error seeding ChatroomMember:", error);
+    console.error("Error seeding User:", error);
   }
 }
 
-await seedChatroomMember();
+await seedUser();

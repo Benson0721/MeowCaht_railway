@@ -17,7 +17,6 @@ export const signup = async (req, res) => {
       const user = {
         _id: registeredUser._id,
         username: registeredUser.username,
-        avatar: registeredUser.avatar,
         status: registeredUser.status,
       };
       res.json(user);
