@@ -45,7 +45,10 @@ const app = express();
 const port = process.env.PORT || 5000;
 app.set("trust proxy", 1);
 
-const whiteList = ["https://meow-chat.vercel.app", "http://localhost:5173"];
+const whiteList = [
+  "https://meow-chat-vercel.vercel.app",
+  "http://localhost:5173",
+];
 
 app.use(
   cors({
