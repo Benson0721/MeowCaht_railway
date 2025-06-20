@@ -30,8 +30,6 @@ if (process.env.NODE_ENV !== "production") {
   }
 }
 
-const store = await connectToDB();
-
 async function seedUser() {
   try {
     await User.find().updateMany({

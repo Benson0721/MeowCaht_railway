@@ -15,9 +15,7 @@ export const getChatrooms = async (req, res) => {
 export const getOneChatroom = async (req, res) => {
   try {
     const chatroom_id = req.params.chatroom_id;
-    console.log("getOneChatroom", chatroom_id);
     const chatroom = await Chatroom.findOne({ _id: chatroom_id });
-    console.log("getOneChatroom", chatroom);
     res.json(chatroom);
   } catch (error) {
     console.error("伺服器錯誤:", error.message);
@@ -53,8 +51,6 @@ export const newChatroom = async (req, res) => {
 export const inviteUser = async (req, res) => {
   try {
     const { chatroom_id, user_id } = req.body;
-    console.log(chatroom_id, user_id);
-    console.log("後端");
     const chatroom = await Chatroom.findOne({
       _id: chatroom_id,
     });
