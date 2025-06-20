@@ -9,7 +9,7 @@ import session from "express-session";
 import { connectToDB } from "./utils/mongoDB.js";
 import User from "./models/user-schema.js";
 import cors from "cors";
-import wsServer from "./initSocket.js";
+import initSocket from "./initSocket.js";
 import {
   UserRoutes,
   ChatroomRoutes,

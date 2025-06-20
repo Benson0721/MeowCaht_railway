@@ -1,7 +1,12 @@
 import { Server } from "socket.io";
 
 export default function initSocket(server) {
-  const io = new Server(server);
+  const io = new Server(server, {
+    cors: {
+      origin: ["https://meow-chat-vercel.vercel.app", "http://localhost:5173"],
+      credentials: true,
+    },
+  });
 
   io.on("connection", (socket) => {
     const userId = socket.handshake.query.userId;
