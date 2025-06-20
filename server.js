@@ -9,7 +9,7 @@ import session from "express-session";
 import { connectToDB } from "./utils/mongoDB.js";
 import User from "./models/user-schema.js";
 import cors from "cors";
-import wsServer from "./wsServer.js";
+import wsServer from "./initSocket.js";
 import {
   UserRoutes,
   ChatroomRoutes,
@@ -17,6 +17,7 @@ import {
   StickerRoutes,
   ChatroomMemberRoutes,
 } from "./routes/routes.js";
+import { createServer } from "node:http";
 // 獲取當前檔案的路徑
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -41,7 +42,7 @@ if (process.env.NODE_ENV !== "production") {
 const store = await connectToDB();
 
 const app = express();
-
+const server = createServer(app);
 const port = process.env.PORT || 5000;
 app.set("trust proxy", 1);
 
@@ -111,7 +112,7 @@ app.get("/wakeup", (req, res) => {
   res.send("Allright...I have wake up...");
 });
 
-const server = wsServer(app);
+initSocket(server);
 
 server.listen(port, () => {
   console.log(`Serving on port ${port}`);
