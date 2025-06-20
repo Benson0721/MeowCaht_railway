@@ -1,8 +1,6 @@
 import { Server } from "socket.io";
 import express from "express";
 import { createServer } from "node:http";
-import { fileURLToPath } from "url";
-import path from "path";
 import cors from "cors";
 const app = express();
 const server = createServer(app);
