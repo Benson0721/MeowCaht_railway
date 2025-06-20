@@ -4,7 +4,6 @@ export default function initSocket(server) {
   const io = new Server(server, {
     pingInterval: 5000,
     pingTimeout: 60000,
-    transports: ["websocket"],
     reconnection: true,
     reconnectionAttempts: 5,
     reconnectionDelay: 1000,
@@ -21,24 +20,14 @@ export default function initSocket(server) {
 
     socket.on("join room", (room_id) => {
       socket.join(room_id);
-      console.log("進入房間成功,使用者id:", userId, "房間id", room_id);
     });
 
     socket.on("leave room", (room_id) => {
       socket.leave(room_id);
-      console.log("離開房間成功,使用者id:", userId, "房間id", room_id);
     });
 
     socket.on("chat message", (msg, room_id) => {
       io.to(room_id).emit("chat message", msg);
-      console.log(
-        "發送訊息成功,使用者id:",
-        userId,
-        "房間id",
-        room_id,
-        "訊息",
-        msg
-      );
     });
 
     socket.on("update message", (message_id, user_id) => {
@@ -59,7 +48,6 @@ export default function initSocket(server) {
 
     socket.on("update last_read_time", (chatroom_id, user_id) => {
       io.emit("update last_read_time", chatroom_id, user_id);
-      console.log("已讀訊息成功,使用者id:", user_id, "房間id", chatroom_id);
     });
     socket.on("disconnect", () => {
       io.emit("user-status-offline", userId);

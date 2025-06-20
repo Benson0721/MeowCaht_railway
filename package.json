@@ -4,9 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev:api": "nodemon apiServer.js",
-    "dev:ws": "nodemon wsServer.js",
-    "dev": "concurrently \"npm run dev:api\" \"npm run dev:ws\"",
+    "dev": "nodemon server.js",
     "start": "node server.js"
   },
   "dependencies": {
