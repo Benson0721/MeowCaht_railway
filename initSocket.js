@@ -19,6 +19,7 @@ export default function initSocket(server) {
     io.emit("user-status-online", userId);
 
     socket.on("join room", (room_id) => {
+      console.log("使用者加入聊天室: ", room_id);
       socket.join(room_id);
     });
 
@@ -51,11 +52,9 @@ export default function initSocket(server) {
       io.emit("update last_read_time", chatroom_id, user_id);
     });
     socket.on("disconnect", () => {
-      console.log("user-status-away", userId);
       io.emit("user-status-away", userId);
     });
     socket.on("logout", () => {
-      console.log("user-status-offline", userId);
       io.emit("user-status-offline", userId);
     });
   });
