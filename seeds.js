@@ -30,18 +30,20 @@ if (process.env.NODE_ENV !== "production") {
   }
 }
 
-async function seedUser() {
+connectToDB();
+
+async function seedChatroomMember() {
   try {
-    await User.find().updateMany({
-      $set: {
-        avatar:
-          "https://images.unsplash.com/photo-1535268647677-300dbf3d78d1?w=100&h=100&fit=crop&crop=faces",
+    const chatroomMembers = await ChatroomMember.deleteMany({
+      chatroom_id: {
+        $ne: new mongoose.Types.ObjectId("6841736bc6e1ff00b29a1822"),
       },
     });
-    console.log("User seeded successfully!");
+    console.log(chatroomMembers);
+    console.log("ChatroomMember seeded successfully!");
   } catch (error) {
-    console.error("Error seeding User:", error);
+    console.error("Error seeding ChatroomMember:", error);
   }
 }
 
-await seedUser();
+await seedChatroomMember();

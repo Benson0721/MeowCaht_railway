@@ -27,7 +27,8 @@ export default function initSocket(server) {
     });
 
     socket.on("chat message", (msg, room_id) => {
-      io.to(room_id).emit("chat message", msg);
+      console.log("收到訊息chat message: ", msg, room_id);
+      io.to(room_id).emit("chat message", msg, room_id);
     });
 
     socket.on("update message", (message_id, user_id) => {
@@ -50,6 +51,11 @@ export default function initSocket(server) {
       io.emit("update last_read_time", chatroom_id, user_id);
     });
     socket.on("disconnect", () => {
+      console.log("user-status-away", userId);
+      io.emit("user-status-away", userId);
+    });
+    socket.on("logout", () => {
+      console.log("user-status-offline", userId);
       io.emit("user-status-offline", userId);
     });
   });
