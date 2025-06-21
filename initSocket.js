@@ -15,11 +15,11 @@ export default function initSocket(server) {
 
   io.on("connection", (socket) => {
     const userId = socket.handshake.query.userId;
-    console.log("連線成功,使用者id:", userId);
+   
     io.emit("user-status-online", userId);
 
     socket.on("join room", (room_id) => {
-      console.log("使用者加入聊天室: ", room_id);
+  
       socket.join(room_id);
     });
 
@@ -28,7 +28,6 @@ export default function initSocket(server) {
     });
 
     socket.on("chat message", (msg, room_id) => {
-      console.log("收到訊息chat message: ", msg, room_id);
       io.to(room_id).emit("chat message", msg, room_id);
     });
 
