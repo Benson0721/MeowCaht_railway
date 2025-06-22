@@ -15,11 +15,10 @@ export default function initSocket(server) {
 
   io.on("connection", (socket) => {
     const userId = socket.handshake.query.userId;
-   
+
     io.emit("user-status-online", userId);
 
     socket.on("join room", (room_id) => {
-  
       socket.join(room_id);
     });
 
@@ -49,6 +48,9 @@ export default function initSocket(server) {
 
     socket.on("update last_read_time", (chatroom_id, user_id) => {
       io.emit("update last_read_time", chatroom_id, user_id);
+    });
+    socket.on("update read count", (messages, chatroom_id) => {
+      io.emit("update read count", messages, chatroom_id);
     });
     socket.on("disconnect", () => {
       io.emit("user-status-away", userId);
