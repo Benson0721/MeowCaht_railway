@@ -1,5 +1,8 @@
 import { Server } from "socket.io";
-
+import inviteHandler from "./socketHandler/inviteHandler.js";
+import chatHandler from "./socketHandler/chatHandler.js";
+import roomHandler from "./socketHandler/roomHandler.js";
+import connectHandler from "./socketHandler/connectHandler.js";
 export default function initSocket(server) {
   const io = new Server(server, {
     pingInterval: 5000,
@@ -15,55 +18,17 @@ export default function initSocket(server) {
     },
   });
 
+  const userSocketMap = new Map();
+
   io.on("connection", (socket) => {
     const userId = socket.handshake.query.userId;
-    io.emit("user-status-online", userId);
+    userSocketMap?.set(userId, { socketId: socket.id, status: "online" });
+    connectHandler(socket, userId, userSocketMap);
 
-    socket.on("ping", () => {
-      console.log("I am alive");
-    });
+    inviteHandler(socket, io, userSocketMap);
 
-    
+    chatHandler(socket, io);
 
-    socket.on("join room", (room_id) => {
-      socket.join(room_id);
-    });
-
-    socket.on("leave room", (room_id) => {
-      socket.leave(room_id);
-    });
-
-    socket.on("chat message", (msg, room_id) => {
-      io.to(room_id).emit("chat message", msg, room_id);
-    });
-
-    socket.on("update message", (message_id, user_id) => {
-      io.emit("update message", message_id, user_id);
-    });
-
-    socket.on("update unread", (chatroom_id) => {
-      io.emit("update unread", chatroom_id);
-    });
-
-    socket.on("send group invite", (chatroom, sender, targetUser_id) => {
-      io.emit("send group invite", chatroom, sender, targetUser_id);
-    });
-
-    socket.on("invite accepted", (chatroom_id, targetUser_id) => {
-      io.emit("invite accepted", chatroom_id, targetUser_id);
-    });
-
-    socket.on("update last_read_time", (chatroom_id, user_id) => {
-      io.emit("update last_read_time", chatroom_id, user_id);
-    });
-    socket.on("update read count", (messages, chatroom_id) => {
-      io.emit("update read count", messages, chatroom_id);
-    });
-    socket.on("disconnect", () => {
-      io.emit("user-status-away", userId);
-    });
-    socket.on("logout", () => {
-      io.emit("user-status-offline", userId);
-    });
+    roomHandler(socket, io);
   });
 }

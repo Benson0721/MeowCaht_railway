@@ -48,7 +48,7 @@ export const newChatroom = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
-export const inviteUser = async (req, res) => {
+export const inviteUserToChatroom = async (req, res) => {
   try {
     const { chatroom_id, user_id } = req.body;
     const chatroom = await Chatroom.findOne({
